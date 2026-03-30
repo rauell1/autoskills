@@ -2,13 +2,17 @@ import { spawn } from "node:child_process";
 import { parseSkillPath } from "./lib.mjs";
 import { dim, green, cyan, red, HIDE_CURSOR, SHOW_CURSOR, SPINNER } from "./colors.mjs";
 
+export function getNpxCommand(platform = process.platform) {
+  return platform === "win32" ? "npx.cmd" : "npx";
+}
+
 export function installSkill(skillPath) {
   const { repo, skillName } = parseSkillPath(skillPath);
   const args = ["-y", "skills", "add", repo];
   if (skillName) args.push("--skill", skillName);
   args.push("-y");
   return new Promise((resolve) => {
-    const child = spawn("npx", args, {
+    const child = spawn(getNpxCommand(), args, {
       stdio: ["pipe", "pipe", "pipe"],
     });
 
