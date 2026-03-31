@@ -163,6 +163,51 @@ export const SKILLS_MAP = [
     skills: ["sleekdotdesign/agent-skills/sleek-design-mobile-apps"],
   },
   {
+    id: "kotlin-multiplatform",
+    name: "Kotlin Multiplatform",
+    detect: {
+      configFileContent: {
+        scanGradleLayout: true,
+        patterns: [
+          'kotlin("multiplatform")',
+          "org.jetbrains.kotlin.multiplatform",
+          'id("org.jetbrains.kotlin.multiplatform")',
+          "kotlin-multiplatform",
+        ],
+      },
+    },
+    skills: [
+      "Kotlin/kotlin-agent-skills/kotlin-tooling-cocoapods-spm-migration",
+      "Kotlin/kotlin-agent-skills/kotlin-tooling-agp9-migration",
+    ],
+  },
+  {
+    id: "android",
+    name: "Android",
+    detect: {
+      configFileContent: {
+        scanGradleLayout: true,
+        patterns: [
+          "com.android.application",
+          "com.android.library",
+          'id("com.android.application")',
+          'id("com.android.library")',
+          "com.android.kotlin.multiplatform.library",
+        ],
+      },
+    },
+    skills: [
+      "krutikJain/android-agent-skills/android-kotlin-core",
+      "krutikJain/android-agent-skills/android-compose-foundations",
+      "krutikJain/android-agent-skills/android-architecture-clean",
+      "krutikJain/android-agent-skills/android-di-hilt",
+      "krutikJain/android-agent-skills/android-gradle-build-logic",
+      "krutikJain/android-agent-skills/android-coroutines-flow",
+      "krutikJain/android-agent-skills/android-networking-retrofit-okhttp",
+      "krutikJain/android-agent-skills/android-testing-unit",
+    ],
+  },
+  {
     id: "remotion",
     name: "Remotion",
     detect: {
@@ -442,7 +487,7 @@ export const COMBO_SKILLS_MAP = [
     id: "tailwind-shadcn",
     name: "Tailwind CSS + shadcn/ui",
     requires: ["tailwind", "shadcn"],
-    skills: ["jezweb/claude-skills/tailwind-v4-shadcn"],
+    skills: ["secondsky/claude-skills/tailwind-v4-shadcn"],
   },
   {
     id: "gsap-react",
@@ -497,6 +542,41 @@ const SCAN_SKIP_DIRS = new Set([
   ".output", ".nuxt", ".svelte-kit", "__pycache__", ".cache",
   "coverage", ".turbo", "var",
 ]);
+
+const GRADLE_SCAN_ROOT_FILES = [
+  "build.gradle.kts",
+  "build.gradle",
+  "settings.gradle.kts",
+  "settings.gradle",
+  "gradle/libs.versions.toml",
+];
+
+function gradleLayoutCandidatePaths(projectDir) {
+  const candidates = [];
+  for (const f of GRADLE_SCAN_ROOT_FILES) {
+    candidates.push(join(projectDir, f));
+  }
+  let entries;
+  try {
+    entries = readdirSync(projectDir, { withFileTypes: true });
+  } catch {
+    entries = [];
+  }
+  for (const e of entries) {
+    if (!e.isDirectory() || e.name.startsWith(".") || SCAN_SKIP_DIRS.has(e.name)) continue;
+    for (const g of ["build.gradle.kts", "build.gradle"]) {
+      candidates.push(join(projectDir, e.name, g));
+    }
+  }
+  return candidates;
+}
+
+function resolveConfigFileContentPaths(projectDir, config) {
+  if (config.scanGradleLayout) {
+    return gradleLayoutCandidatePaths(projectDir);
+  }
+  return (config.files || []).map((f) => join(projectDir, f));
+}
 
 export function hasWebFrontendFiles(projectDir, maxDepth = 3) {
   function scan(dir, depth) {
@@ -648,16 +728,18 @@ function detectTechnologiesInDir(dir) {
     }
 
     if (!found && tech.detect.configFileContent) {
-      const { files, patterns } = tech.detect.configFileContent;
-      for (const f of files) {
-        const filePath = join(dir, f);
-        if (existsSync(filePath)) {
-          try {
-            const content = readFileSync(filePath, "utf-8");
-            found = patterns.some((p) => content.includes(p));
-            if (found) break;
-          } catch {}
-        }
+      const cfg = tech.detect.configFileContent;
+      const paths = resolveConfigFileContentPaths(dir, cfg);
+      const { patterns } = cfg;
+      for (const filePath of paths) {
+        if (!existsSync(filePath)) continue;
+        try {
+          const content = readFileSync(filePath, "utf-8");
+          if (patterns.some((p) => content.includes(p))) {
+            found = true;
+            break;
+          }
+        } catch {}
       }
     }
 

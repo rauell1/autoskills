@@ -46,7 +46,7 @@ npx autoskills --dry-run
 
 ## Supported Technologies
 
-`autoskills` detects **37+ technologies** from your `package.json`, lockfiles, and config files:
+`autoskills` detects **39+ technologies** from your `package.json`, lockfiles, Gradle files, and config files:
 
 ### Frameworks & Libraries
 
@@ -61,6 +61,8 @@ npx autoskills --dry-run
 | Astro | `astro` package or `astro.config.*` |
 | Expo | `expo` package |
 | React Native | `react-native` package |
+| Kotlin Multiplatform | Gradle with KMP plugin: `kotlin("multiplatform")`, `org.jetbrains.kotlin.multiplatform`, or `kotlin-multiplatform` in `gradle/libs.versions.toml` |
+| Android | Gradle with `com.android.application`, `com.android.library`, or `com.android.kotlin.multiplatform.library` |
 | Remotion | `remotion`, `@remotion/cli` |
 | GSAP | `gsap` package |
 | Express | `express` package |

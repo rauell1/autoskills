@@ -21,7 +21,7 @@ npx autoskills
 ## How it works
 
 1. Run `npx autoskills` in your project root
-2. Your `package.json` and config files are scanned to detect technologies
+2. Your `package.json`, Gradle files, and config files are scanned to detect technologies
 3. The best matching AI agent skills are installed via [skills.sh](https://skills.sh)
 
 That's it. No config needed.
@@ -36,7 +36,7 @@ That's it. No config needed.
 
 ## Supported technologies
 
-React · Next.js · Vue · Nuxt · Pinia · Svelte · Angular · Astro · Tailwind CSS · shadcn/ui · TypeScript · Supabase · Neon · Playwright · Expo · React Native · Remotion · Better Auth · Turborepo · Vite · Azure · Vercel · Vercel AI SDK · ElevenLabs · Cloudflare · Durable Objects · Cloudflare Agents · Cloudflare AI · AWS · SwiftUI · oxlint · GSAP · Node.js · Express · Bun · Deno
+React · Next.js · Vue · Nuxt · Pinia · Svelte · Angular · Astro · Tailwind CSS · shadcn/ui · TypeScript · Supabase · Neon · Playwright · Expo · React Native · Kotlin Multiplatform · Android · Remotion · Better Auth · Turborepo · Vite · Azure · Vercel · Vercel AI SDK · ElevenLabs · Cloudflare · Durable Objects · Cloudflare Agents · Cloudflare AI · AWS · SwiftUI · oxlint · GSAP · Node.js · Express · Bun · Deno
 
 ## Requirements
 

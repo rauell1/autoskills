@@ -22,6 +22,7 @@ describe("CLI", () => {
     assert.ok(output.includes("autoskills"));
     assert.ok(output.includes("--dry-run"));
     assert.ok(output.includes("--yes"));
+    assert.ok(output.includes("--agent"));
   });
 
   it("shows help with -h", () => {

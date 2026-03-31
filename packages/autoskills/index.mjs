@@ -20,11 +20,20 @@ process.on("SIGINT", () => {
 
 function parseArgs() {
   const args = process.argv.slice(2);
+  const agents = [];
+  const agentIdx = args.findIndex((a) => a === "-a" || a === "--agent");
+  if (agentIdx !== -1) {
+    for (let i = agentIdx + 1; i < args.length; i++) {
+      if (args[i].startsWith("-")) break;
+      agents.push(args[i]);
+    }
+  }
   return {
     autoYes: args.includes("-y") || args.includes("--yes"),
     dryRun: args.includes("--dry-run"),
     verbose: args.includes("--verbose") || args.includes("-v"),
     help: args.includes("--help") || args.includes("-h"),
+    agents,
   };
 }
 
@@ -33,14 +42,16 @@ function showHelp() {
   ${bold("autoskills")} — Auto-install the best AI skills for your project
 
   ${bold("Usage:")}
-    npx autoskills            Detect & install skills
-    npx autoskills ${dim("-y")}        Skip confirmation
-    npx autoskills ${dim("--dry-run")} Show what would be installed
+    npx autoskills                   Detect & install skills
+    npx autoskills ${dim("-y")}                   Skip confirmation
+    npx autoskills ${dim("--dry-run")}            Show what would be installed
+    npx autoskills ${dim("-a cursor claude-code")} Install for specific IDEs only
 
   ${bold("Options:")}
     -y, --yes       Skip confirmation prompt
     --dry-run       Show skills without installing
     -v, --verbose   Show error details on failure
+    -a, --agent     Install for specific IDEs only (e.g. cursor, claude-code)
     -h, --help      Show this help message
 `);
 }
@@ -181,7 +192,7 @@ async function selectSkills(skills, autoYes) {
 // ── Main ─────────────────────────────────────────────────────
 
 async function main() {
-  const { autoYes, dryRun, verbose, help } = parseArgs();
+  const { autoYes, dryRun, verbose, help, agents } = parseArgs();
 
   if (help) {
     showHelp();
@@ -231,10 +242,13 @@ async function main() {
   }
 
   console.log(cyan("   ▸ ") + bold("Installing skills..."));
+  if (agents.length > 0) {
+    console.log(dim(`   Agents: ${agents.join(", ")}`));
+  }
   console.log();
 
   const startTime = Date.now();
-  const { installed, failed, errors } = await installAll(selectedSkills);
+  const { installed, failed, errors } = await installAll(selectedSkills, agents);
   const elapsed = Date.now() - startTime;
 
   if (process.stdout.isTTY) {
