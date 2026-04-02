@@ -186,13 +186,13 @@ function expandWorkspacePatterns(projectDir, patterns) {
         if (!entry.isDirectory() || SCAN_SKIP_DIRS.has(entry.name) || entry.name.startsWith("."))
           continue;
         const wsDir = join(parent, entry.name);
-        if (existsSync(join(wsDir, "package.json"))) {
+        if (existsSync(join(wsDir, "package.json")) || existsSync(join(wsDir, "deno.json")) || existsSync(join(wsDir, "deno.jsonc"))) {
           dirs.push(wsDir);
         }
       }
     } else {
       const wsDir = join(projectDir, pattern);
-      if (existsSync(join(wsDir, "package.json"))) {
+      if (existsSync(join(wsDir, "package.json")) || existsSync(join(wsDir, "deno.json")) || existsSync(join(wsDir, "deno.jsonc"))) {
         dirs.push(wsDir);
       }
     }
@@ -233,6 +233,16 @@ export function resolveWorkspaces(projectDir) {
     }
   }
 
+  const denoJson = readDenoJson(projectDir);
+  if (denoJson?.workspace) {
+    const members = Array.isArray(denoJson.workspace) ? denoJson.workspace : [];
+    if (members.length > 0) {
+      return expandWorkspacePatterns(projectDir, members).filter(
+        (d) => resolve(d) !== resolve(projectDir),
+      );
+    }
+  }
+
   return [];
 }
 
@@ -251,6 +261,44 @@ export function readPackageJson(dir) {
   } catch {
     return null;
   }
+}
+
+/**
+ * Reads and parses deno.json or deno.jsonc from the given directory.
+ * Returns the parsed object, or null if neither file exists or is malformed.
+ * @param {string} dir - Directory to look in.
+ * @returns {object|null}
+ */
+export function readDenoJson(dir) {
+  for (const name of ["deno.json", "deno.jsonc"]) {
+    const filePath = join(dir, name);
+    if (!existsSync(filePath)) continue;
+    try {
+      return JSON.parse(readFileSync(filePath, "utf-8"));
+    } catch {
+      continue;
+    }
+  }
+  return null;
+}
+
+/**
+ * Extracts package names from a Deno import map.
+ * Handles `npm:`, `jsr:` prefixed specifiers and plain URLs.
+ * @param {object|null} denoJson - Parsed deno.json object.
+ * @returns {string[]} Normalised package names.
+ */
+export function getDenoImportNames(denoJson) {
+  if (!denoJson?.imports) return [];
+  return Object.values(denoJson.imports)
+    .filter((s) => typeof s === "string" && (s.startsWith("npm:") || s.startsWith("jsr:")))
+    .map((specifier) => {
+      const bare = specifier.replace(/^(?:npm|jsr):/, "");
+      if (bare.startsWith("@")) {
+        return bare.replace(/^(@[^\/]+\/[^@]+).*$/, "$1");
+      }
+      return bare.replace(/@.*$/, "");
+    });
 }
 
 /**
@@ -273,18 +321,22 @@ export function getAllPackageNames(pkg) {
 function detectTechnologiesInDir(dir) {
   const pkg = readPackageJson(dir);
   const allPackages = getAllPackageNames(pkg);
+  const denoImports = getDenoImportNames(readDenoJson(dir));
+  const allDeps = denoImports.length > 0
+    ? [...new Set([...allPackages, ...denoImports])]
+    : allPackages;
   const detected = [];
 
   for (const tech of SKILLS_MAP) {
     let found = false;
 
     if (tech.detect.packages) {
-      found = tech.detect.packages.some((p) => allPackages.includes(p));
+      found = tech.detect.packages.some((p) => allDeps.includes(p));
     }
 
     if (!found && tech.detect.packagePatterns) {
       found = tech.detect.packagePatterns.some((pattern) =>
-        allPackages.some((p) => pattern.test(p)),
+        allDeps.some((p) => pattern.test(p)),
       );
     }
 
@@ -313,7 +365,7 @@ function detectTechnologiesInDir(dir) {
     }
   }
 
-  const isFrontendByPackages = allPackages.some((p) => FRONTEND_PACKAGES.includes(p));
+  const isFrontendByPackages = allDeps.some((p) => FRONTEND_PACKAGES.includes(p));
   const isFrontendByFiles = hasWebFrontendFiles(dir);
 
   return { detected, isFrontendByPackages, isFrontendByFiles };

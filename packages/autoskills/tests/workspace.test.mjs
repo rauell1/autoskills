@@ -155,4 +155,69 @@ describe("resolveWorkspaces", () => {
     writeFileSync(join(tmpDir, "package.json"), JSON.stringify({ workspaces: [] }));
     assert.deepStrictEqual(resolveWorkspaces(tmpDir), []);
   });
+
+  it("detects Deno workspace members from deno.json", () => {
+    writeFileSync(
+      join(tmpDir, "deno.json"),
+      JSON.stringify({ workspace: ["./api", "./shared"] }),
+    );
+    mkdirSync(join(tmpDir, "api"), { recursive: true });
+    writeFileSync(join(tmpDir, "api", "deno.json"), "{}");
+    mkdirSync(join(tmpDir, "shared"), { recursive: true });
+    writeFileSync(join(tmpDir, "shared", "deno.json"), "{}");
+
+    const result = resolveWorkspaces(tmpDir);
+    assert.strictEqual(result.length, 2);
+    assert.ok(result.some((d) => d.includes("api")));
+    assert.ok(result.some((d) => d.includes("shared")));
+  });
+
+  it("Deno workspace members with deno.jsonc are detected", () => {
+    writeFileSync(
+      join(tmpDir, "deno.json"),
+      JSON.stringify({ workspace: ["./lib"] }),
+    );
+    mkdirSync(join(tmpDir, "lib"), { recursive: true });
+    writeFileSync(join(tmpDir, "lib", "deno.jsonc"), "{}");
+
+    const result = resolveWorkspaces(tmpDir);
+    assert.strictEqual(result.length, 1);
+    assert.ok(result[0].includes("lib"));
+  });
+
+  it("pnpm-workspace.yaml takes precedence over deno.json workspace", () => {
+    writeFileSync(join(tmpDir, "package.json"), JSON.stringify({}));
+    writeFileSync(join(tmpDir, "pnpm-workspace.yaml"), "packages:\n  - packages/*\n");
+    writeFileSync(
+      join(tmpDir, "deno.json"),
+      JSON.stringify({ workspace: ["./deno-member"] }),
+    );
+    mkdirSync(join(tmpDir, "packages", "core"), { recursive: true });
+    writeFileSync(join(tmpDir, "packages", "core", "package.json"), "{}");
+    mkdirSync(join(tmpDir, "deno-member"), { recursive: true });
+    writeFileSync(join(tmpDir, "deno-member", "deno.json"), "{}");
+
+    const result = resolveWorkspaces(tmpDir);
+    assert.strictEqual(result.length, 1);
+    assert.ok(result[0].includes("core"));
+  });
+
+  it("package.json workspaces take precedence over deno.json workspace", () => {
+    writeFileSync(
+      join(tmpDir, "package.json"),
+      JSON.stringify({ workspaces: ["packages/*"] }),
+    );
+    writeFileSync(
+      join(tmpDir, "deno.json"),
+      JSON.stringify({ workspace: ["./deno-member"] }),
+    );
+    mkdirSync(join(tmpDir, "packages", "ui"), { recursive: true });
+    writeFileSync(join(tmpDir, "packages", "ui", "package.json"), "{}");
+    mkdirSync(join(tmpDir, "deno-member"), { recursive: true });
+    writeFileSync(join(tmpDir, "deno-member", "deno.json"), "{}");
+
+    const result = resolveWorkspaces(tmpDir);
+    assert.strictEqual(result.length, 1);
+    assert.ok(result[0].includes("ui"));
+  });
 });

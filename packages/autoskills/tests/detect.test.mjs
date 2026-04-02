@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { getAllPackageNames, readPackageJson, detectTechnologies, detectCombos } from "../lib.mjs";
+import { getAllPackageNames, readPackageJson, readDenoJson, getDenoImportNames, detectTechnologies, detectCombos } from "../lib.mjs";
 
 // ── getAllPackageNames ─────────────────────────────────────────
 
@@ -541,6 +541,153 @@ plugins {
     assert.ok(clerk.skills.includes("clerk/skills/clerk-orgs"));
     assert.ok(clerk.skills.includes("clerk/skills/clerk-webhooks"));
     assert.ok(clerk.skills.includes("clerk/skills/clerk-testing"));
+  });
+
+  it("detects React from deno.json npm: import", () => {
+    writeFileSync(
+      join(tmpDir, "deno.json"),
+      JSON.stringify({ imports: { react: "npm:react@^19", "react-dom": "npm:react-dom@^19" } }),
+    );
+    const { detected } = detectTechnologies(tmpDir);
+    const ids = detected.map((t) => t.id);
+    assert.ok(ids.includes("react"));
+  });
+
+  it("detects Hono from deno.json npm: import", () => {
+    writeFileSync(
+      join(tmpDir, "deno.json"),
+      JSON.stringify({ imports: { hono: "npm:hono@^4" } }),
+    );
+    const { detected } = detectTechnologies(tmpDir);
+    assert.ok(detected.some((t) => t.id === "hono"));
+  });
+
+  it("detects Supabase from deno.json npm: scoped import", () => {
+    writeFileSync(
+      join(tmpDir, "deno.json"),
+      JSON.stringify({ imports: { "@supabase/supabase-js": "npm:@supabase/supabase-js@^2" } }),
+    );
+    const { detected } = detectTechnologies(tmpDir);
+    assert.ok(detected.some((t) => t.id === "supabase"));
+  });
+
+  it("detects frontend from deno.json imports", () => {
+    writeFileSync(
+      join(tmpDir, "deno.json"),
+      JSON.stringify({ imports: { react: "npm:react@^19" } }),
+    );
+    const { isFrontend } = detectTechnologies(tmpDir);
+    assert.strictEqual(isFrontend, true);
+  });
+
+  it("merges package.json and deno.json dependencies", () => {
+    writeFileSync(
+      join(tmpDir, "package.json"),
+      JSON.stringify({ dependencies: { next: "^15" } }),
+    );
+    writeFileSync(
+      join(tmpDir, "deno.json"),
+      JSON.stringify({ imports: { react: "npm:react@^19" } }),
+    );
+    const { detected } = detectTechnologies(tmpDir);
+    const ids = detected.map((t) => t.id);
+    assert.ok(ids.includes("nextjs"));
+    assert.ok(ids.includes("react"));
+  });
+});
+
+// ── readDenoJson ──────────────────────────────────────────────
+
+describe("readDenoJson", () => {
+  let tmpDir;
+
+  beforeEach(() => {
+    tmpDir = mkdtempSync(join(tmpdir(), "autoskills-deno-"));
+  });
+
+  afterEach(() => {
+    rmSync(tmpDir, { recursive: true, force: true });
+  });
+
+  it("returns null when no deno.json exists", () => {
+    assert.strictEqual(readDenoJson(tmpDir), null);
+  });
+
+  it("parses valid deno.json", () => {
+    const data = { imports: { "@std/path": "jsr:@std/path@^1" } };
+    writeFileSync(join(tmpDir, "deno.json"), JSON.stringify(data));
+    assert.deepStrictEqual(readDenoJson(tmpDir), data);
+  });
+
+  it("parses deno.jsonc when deno.json is absent", () => {
+    const data = { imports: { hono: "npm:hono@^4" } };
+    writeFileSync(join(tmpDir, "deno.jsonc"), JSON.stringify(data));
+    assert.deepStrictEqual(readDenoJson(tmpDir), data);
+  });
+
+  it("prefers deno.json over deno.jsonc", () => {
+    writeFileSync(join(tmpDir, "deno.json"), JSON.stringify({ from: "json" }));
+    writeFileSync(join(tmpDir, "deno.jsonc"), JSON.stringify({ from: "jsonc" }));
+    assert.deepStrictEqual(readDenoJson(tmpDir), { from: "json" });
+  });
+
+  it("returns null for invalid JSON", () => {
+    writeFileSync(join(tmpDir, "deno.json"), "{ not valid }");
+    assert.strictEqual(readDenoJson(tmpDir), null);
+  });
+});
+
+// ── getDenoImportNames ────────────────────────────────────────
+
+describe("getDenoImportNames", () => {
+  it("returns empty array for null input", () => {
+    assert.deepStrictEqual(getDenoImportNames(null), []);
+  });
+
+  it("returns empty array when no imports field", () => {
+    assert.deepStrictEqual(getDenoImportNames({}), []);
+  });
+
+  it("extracts npm: prefixed packages", () => {
+    const result = getDenoImportNames({ imports: { express: "npm:express@^4" } });
+    assert.deepStrictEqual(result, ["express"]);
+  });
+
+  it("extracts jsr: prefixed packages", () => {
+    const result = getDenoImportNames({ imports: { "@std/path": "jsr:@std/path@^1" } });
+    assert.deepStrictEqual(result, ["@std/path"]);
+  });
+
+  it("handles scoped npm packages", () => {
+    const result = getDenoImportNames({
+      imports: { "@supabase/supabase-js": "npm:@supabase/supabase-js@^2" },
+    });
+    assert.deepStrictEqual(result, ["@supabase/supabase-js"]);
+  });
+
+  it("skips non-npm/jsr specifiers", () => {
+    const result = getDenoImportNames({
+      imports: {
+        react: "npm:react@^19",
+        local: "./local.ts",
+        remote: "https://deno.land/x/mod@v1/mod.ts",
+      },
+    });
+    assert.deepStrictEqual(result, ["react"]);
+  });
+
+  it("handles multiple imports", () => {
+    const result = getDenoImportNames({
+      imports: {
+        react: "npm:react@^19",
+        hono: "npm:hono@^4",
+        "@std/fs": "jsr:@std/fs@^1",
+      },
+    });
+    assert.ok(result.includes("react"));
+    assert.ok(result.includes("hono"));
+    assert.ok(result.includes("@std/fs"));
+    assert.strictEqual(result.length, 3);
   });
 });
 
