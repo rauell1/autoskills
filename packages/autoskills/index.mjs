@@ -20,7 +20,7 @@ import {
   SHOW_CURSOR,
 } from "./colors.mjs";
 import { printBanner, multiSelect, formatTime } from "./ui.mjs";
-import { installAll } from "./installer.mjs";
+import { installAll, resolveSkillsBin } from "./installer.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const VERSION = JSON.parse(readFileSync(join(__dirname, "package.json"), "utf-8")).version;
@@ -160,14 +160,16 @@ function formatSkillLabel(skill, { styled = false } = {}) {
  * @param {{ skill: string, sources: string[] }[]} skills
  */
 function printSkillsList(skills) {
-  const visibleLabels = skills.map((s) => formatSkillLabel(s.skill));
-  const maxLen = Math.max(...visibleLabels.map((label) => label.length));
+  const entries = skills.map((s) => ({
+    ...s,
+    label: formatSkillLabel(s.skill),
+    styledLabel: formatSkillLabel(s.skill, { styled: true }),
+  }));
+  const maxLen = Math.max(...entries.map((e) => e.label.length));
   log(cyan("   ◆ ") + bold(`Skills to install `) + dim(`(${skills.length})`));
   log();
-  for (let i = 0; i < skills.length; i++) {
-    const { skill, sources } = skills[i];
-    const label = formatSkillLabel(skill);
-    const styledLabel = formatSkillLabel(skill, { styled: true });
+  for (let i = 0; i < entries.length; i++) {
+    const { label, styledLabel, sources } = entries[i];
     const techSources = sources.filter((s) => !s.includes(" + "));
     const pad = " ".repeat(maxLen - label.length);
     const num = String(i + 1).padStart(2, " ");
@@ -183,6 +185,7 @@ function printSkillsList(skills) {
  */
 function printSummary({ installed, failed, errors, elapsed, verbose }) {
   log();
+
   if (failed === 0) {
     log(
       green(
@@ -215,6 +218,7 @@ function printSummary({ installed, failed, errors, elapsed, verbose }) {
       }
     }
   }
+
   log();
   log(
     pink("   Enjoyed autoskills? Consider sponsoring → https://github.com/sponsors/midudev"),
@@ -232,21 +236,26 @@ function printSummary({ installed, failed, errors, elapsed, verbose }) {
  * @returns {Promise<{ skill: string, sources: string[] }[]>} Selected skills.
  */
 async function selectSkills(skills, autoYes) {
-  const visibleLabels = skills.map((s) => formatSkillLabel(s.skill));
-  const maxLen = Math.max(...visibleLabels.map((label) => label.length));
-
   if (autoYes) {
     printSkillsList(skills);
     return skills;
   }
+
+  const labelCache = new Map();
+  for (const s of skills) {
+    labelCache.set(s.skill, {
+      label: formatSkillLabel(s.skill),
+      styledLabel: formatSkillLabel(s.skill, { styled: true }),
+    });
+  }
+  const maxLen = Math.max(...[...labelCache.values()].map((v) => v.label.length));
 
   log(cyan("   ◆ ") + bold(`Select skills to install `) + dim(`(${skills.length} found)`));
   log();
 
   const selected = await multiSelect(skills, {
     labelFn: (s) => {
-      const label = formatSkillLabel(s.skill);
-      const styledLabel = formatSkillLabel(s.skill, { styled: true });
+      const { label, styledLabel } = labelCache.get(s.skill);
       return styledLabel + " ".repeat(maxLen - label.length);
     },
     hintFn: (s) => {
@@ -302,6 +311,10 @@ async function main() {
     log(dim("   Check https://skills.sh for the latest."));
     log();
     process.exit(0);
+  }
+
+  if (!dryRun) {
+    setImmediate(resolveSkillsBin);
   }
 
   if (dryRun) {
