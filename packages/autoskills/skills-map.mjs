@@ -479,7 +479,10 @@ export const SKILLS_MAP = [
     detect: {
       configFiles: ["go.mod", "go.work"],
     },
-    skills: [],
+    skills: [
+      "affaan-m/everything-claude-code/golang-patterns",
+      "affaan-m/everything-claude-code/golang-testing",
+    ],
   },
   {
     id: "deno",
