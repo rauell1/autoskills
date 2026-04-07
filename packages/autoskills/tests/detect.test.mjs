@@ -473,7 +473,8 @@ plugins {
     ok(clerk);
     ok(clerk.skills.includes("clerk/skills/clerk"));
     ok(clerk.skills.includes("clerk/skills/clerk-setup"));
-    ok(clerk.skills.includes("clerk/skills/clerk-nextjs-patterns"));
+    ok(clerk.skills.includes("clerk/skills/clerk-custom-ui"));
+    ok(clerk.skills.includes("clerk/skills/clerk-backend-api"));
     ok(clerk.skills.includes("clerk/skills/clerk-orgs"));
     ok(clerk.skills.includes("clerk/skills/clerk-webhooks"));
     ok(clerk.skills.includes("clerk/skills/clerk-testing"));
@@ -735,7 +736,36 @@ describe("detectCombos", () => {
 
   it("detects nextjs-clerk combo", () => {
     const combos = detectCombos(["nextjs", "clerk"]);
-    ok(combos.some((c) => c.id === "nextjs-clerk"));
+    const combo = combos.find((c) => c.id === "nextjs-clerk");
+    ok(combo);
+    ok(combo.skills.includes("clerk/skills/clerk-nextjs-patterns"));
+  });
+
+  it("detects nuxt-clerk combo", () => {
+    const combos = detectCombos(["nuxt", "clerk"]);
+    const combo = combos.find((c) => c.id === "nuxt-clerk");
+    ok(combo);
+    ok(combo.skills.includes("clerk/skills/clerk-nuxt-patterns"));
+  });
+
+  it("detects vue-clerk combo", () => {
+    const combos = detectCombos(["vue", "clerk"]);
+    ok(combos.some((c) => c.id === "vue-clerk"));
+  });
+
+  it("detects react-clerk combo", () => {
+    const combos = detectCombos(["react", "clerk"]);
+    ok(combos.some((c) => c.id === "react-clerk"));
+  });
+
+  it("detects astro-clerk combo", () => {
+    const combos = detectCombos(["astro", "clerk"]);
+    ok(combos.some((c) => c.id === "astro-clerk"));
+  });
+
+  it("detects expo-clerk combo", () => {
+    const combos = detectCombos(["expo", "clerk"]);
+    ok(combos.some((c) => c.id === "expo-clerk"));
   });
 
   it("detects react-react-three-fiber combo", () => {
