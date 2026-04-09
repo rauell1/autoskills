@@ -1,6 +1,36 @@
+// ── Types ─────────────────────────────────────────────────────
+
+export interface ConfigFileContentBlock {
+  files?: string[];
+  patterns: string[];
+  scanGradleLayout?: boolean;
+}
+
+export interface DetectConfig {
+  packages?: string[];
+  packagePatterns?: RegExp[];
+  configFiles?: string[];
+  gems?: string[];
+  configFileContent?: ConfigFileContentBlock | ConfigFileContentBlock[];
+}
+
+export interface Technology {
+  id: string;
+  name: string;
+  detect: DetectConfig;
+  skills: string[];
+}
+
+export interface ComboSkill {
+  id: string;
+  name: string;
+  requires: string[];
+  skills: string[];
+}
+
 // ── Skills Map ────────────────────────────────────────────────
 
-export const SKILLS_MAP = [
+export const SKILLS_MAP: Technology[] = [
   {
     id: "react",
     name: "React",
@@ -737,9 +767,7 @@ export const SKILLS_MAP = [
     detect: {
       configFiles: ["Gemfile", "Gemfile.lock", ".ruby-version", ".ruby-gemset"],
     },
-    skills: [
-      "lucianghinda/superpowers-ruby/ruby",
-    ],
+    skills: ["lucianghinda/superpowers-ruby/ruby"],
   },
   {
     id: "rails",
@@ -764,9 +792,7 @@ export const SKILLS_MAP = [
     detect: {
       gems: ["redis", "sidekiq", "resque", "redis-rails"],
     },
-    skills: [
-      "redis/agent-skills/redis-development",
-    ],
+    skills: ["redis/agent-skills/redis-development"],
   },
   {
     id: "postgres-ruby",
@@ -841,9 +867,7 @@ export const SKILLS_MAP = [
     detect: {
       gems: ["sidekiq"],
     },
-    skills: [
-      "igmarin/rails-agent-skills/rails-background-jobs",
-    ],
+    skills: ["igmarin/rails-agent-skills/rails-background-jobs"],
   },
   {
     id: "rspec",
@@ -1054,7 +1078,7 @@ export const SKILLS_MAP = [
 
 // ── Combo Skills Map (cross-technology) ──────────────────────
 
-export const COMBO_SKILLS_MAP = [
+export const COMBO_SKILLS_MAP: ComboSkill[] = [
   {
     id: "expo-tailwind",
     name: "Expo + Tailwind CSS",
@@ -1221,7 +1245,7 @@ export const COMBO_SKILLS_MAP = [
 
 // ── Frontend Detection ────────────────────────────────────────
 
-export const FRONTEND_PACKAGES = new Set([
+export const FRONTEND_PACKAGES: Set<string> = new Set([
   "react",
   "vue",
   "svelte",
@@ -1235,7 +1259,7 @@ export const FRONTEND_PACKAGES = new Set([
   "@sveltejs/kit",
 ]);
 
-export const FRONTEND_BONUS_SKILLS = [
+export const FRONTEND_BONUS_SKILLS: string[] = [
   "anthropics/skills/frontend-design",
   "addyosmani/web-quality-skills/accessibility",
   "addyosmani/web-quality-skills/seo",
@@ -1243,11 +1267,7 @@ export const FRONTEND_BONUS_SKILLS = [
 
 // ── Agent Folder Map ─────────────────────────────────────────
 
-/**
- * Maps well-known agent home directory folder names to their `skills` CLI agent identifiers.
- * Only the most common agents are included; `.agents` (universal) is handled separately.
- */
-export const AGENT_FOLDER_MAP = {
+export const AGENT_FOLDER_MAP: Record<string, string> = {
   ".claude": "claude-code",
   ".cursor": "cursor",
   ".cline": "cline",
@@ -1265,7 +1285,7 @@ export const AGENT_FOLDER_MAP = {
   ".kiro": "kiro-cli",
 };
 
-export const WEB_FRONTEND_EXTENSIONS = new Set([
+export const WEB_FRONTEND_EXTENSIONS: Set<string> = new Set([
   ".html",
   ".htm",
   ".css",

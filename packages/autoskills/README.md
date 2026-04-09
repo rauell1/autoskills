@@ -137,14 +137,13 @@ If `claude-code` is auto-detected or passed with `-a`, `autoskills` writes a `CL
 
 ### Other
 
-| Technology | Detected from                                                                       |
-| ---------- | ----------------------------------------------------------------------------------- |
-| Playwright | `@playwright/test`, `playwright` or `playwright.config.*`                           |
-| SwiftUI    | `Package.swift`                                                                     |
-| WordPress  | `wp-config.php`, `@wordpress/*`, `composer.json` with wpackagist, theme `style.css` |
-| Tauri      | `@tauri-apps/api`, `@tauri-apps/cli` or `src-tauri/tauri.conf.json`                 |
+| Technology | Detected from                                                                               |
+| ---------- | ------------------------------------------------------------------------------------------- |
+| Playwright | `@playwright/test`, `playwright` or `playwright.config.*`                                   |
+| SwiftUI    | `Package.swift`                                                                             |
+| WordPress  | `wp-config.php`, `@wordpress/*`, `composer.json` with wpackagist, theme `style.css`         |
+| Tauri      | `@tauri-apps/api`, `@tauri-apps/cli` or `src-tauri/tauri.conf.json`                         |
 | Electron   | `electron` package, `electron-builder.yml`, `forge.config.js`, or `electron-vite.config.ts` |
-
 
 ### Web Frontend Detection
 
