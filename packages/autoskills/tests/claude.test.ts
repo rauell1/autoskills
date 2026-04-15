@@ -16,10 +16,7 @@ describe("cleanupClaudeMd", () => {
   });
 
   it("returns cleaned=false when CLAUDE.md has no autoskills markers", () => {
-    writeFileSync(
-      join(tmp.path, "CLAUDE.md"),
-      "# CLAUDE.md\n\nMy custom instructions.\n",
-    );
+    writeFileSync(join(tmp.path, "CLAUDE.md"), "# CLAUDE.md\n\nMy custom instructions.\n");
     const result = cleanupClaudeMd(tmp.path);
     strictEqual(result.cleaned, false);
     strictEqual(result.deleted, false);
