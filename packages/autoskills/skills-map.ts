@@ -461,11 +461,7 @@ export const SKILLS_MAP: Technology[] = [
     detect: {
       packages: ["agents"],
     },
-    skills: [
-      "cloudflare/skills/agents-sdk",
-      "cloudflare/skills/building-mcp-server-on-cloudflare",
-      "cloudflare/skills/sandbox-sdk",
-    ],
+    skills: ["cloudflare/skills/agents-sdk", "cloudflare/skills/sandbox-sdk"],
   },
   {
     id: "cloudflare-ai",
@@ -477,7 +473,7 @@ export const SKILLS_MAP: Technology[] = [
         patterns: ['"ai"'],
       },
     },
-    skills: ["cloudflare/skills/building-ai-agent-on-cloudflare"],
+    skills: ["cloudflare/skills/agents-sdk"],
   },
   {
     id: "terraform",
