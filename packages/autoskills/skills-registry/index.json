@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-04-24T21:21:13.762Z",
+  "generatedAt": "2026-04-24T21:34:15.421Z",
   "reviewer": {
     "model": "gpt-5.4",
     "promptVersion": "1.0.0"
@@ -905,7 +905,7 @@
     "shadcn": {
       "source": "shadcn/ui",
       "skillPath": "shadcn/ui/shadcn",
-      "commitSha": "b9f78c8a35b0b894bba72f4df2d87661c85e7954",
+      "commitSha": "cc20c8a79493156476de07c4711ea15522d3c446",
       "files": [
         "SKILL.md",
         "agents/openai.yml",
@@ -922,7 +922,7 @@
         "rules/styling.md"
       ],
       "sha256": {
-        "SKILL.md": "2089d0638e494b7f7a2222775945badaa1242f05424e341ef9b1f640093cf8a4",
+        "SKILL.md": "de1c1ad6a44d5a963370d172ea8c770cb3b87e733dd09fa5681e86eac473ae2e",
         "agents/openai.yml": "35db91b1eef58b2abe01da9b88577de5a44e233b740cd93d692ddeeadd2afe4d",
         "assets/shadcn-small.png": "0ecc62d682727f68fc4937eed19960c706714fa084d44f63028d611ae02bf3d7",
         "assets/shadcn.png": "7d60ad6fec4d89a0d44ba5a3c9283d2fea0047af5467f9227040e20d927d39b7",
@@ -936,14 +936,18 @@
         "rules/icons.md": "d4a58266648872d9ee07d0c2368843a1cb88b8253b7f528dd7bda9d68b6c2535",
         "rules/styling.md": "4a71da3fc53d8efbedac26946e5b13b53d1edf71583d62088ccc2b8cc7b5fef7"
       },
-      "bundleHash": "4e5d9de5e3675a8377fd6f56505bbf4905fb42757a96bab4d8bf4c2c4b1da701",
+      "bundleHash": "1b1287f853d10e344c8e7bf8f1715ec77554b083ad48fff6a4a1c844009626cd",
       "review": {
-        "status": "approved",
-        "flags": [],
-        "summary": "review skipped (--no-review)",
+        "status": "flagged",
+        "flags": [
+          "external URLs to be fetched from docs output and registry sources should be human-checked",
+          "add command accepts arbitrary URLs/local paths, which could introduce unreviewed third-party code",
+          "environment variable token example in mcp config may warrant review despite not exposing a secret"
+        ],
+        "summary": "The skill is mostly on-topic and non-destructive, but it encourages fetching external URLs and installing registry items/URLs, so a human should verify those supply-chain-related behaviors.",
         "model": "gpt-5.4",
         "promptVersion": "1.0.0",
-        "reviewedAt": "2026-04-17T16:31:20.127Z"
+        "reviewedAt": "2026-04-24T21:34:12.950Z"
       }
     },
     "typescript-advanced-types": {
@@ -1617,7 +1621,7 @@
     "kotlin-tooling-cocoapods-spm-migration": {
       "source": "Kotlin/kotlin-agent-skills",
       "skillPath": "Kotlin/kotlin-agent-skills/kotlin-tooling-cocoapods-spm-migration",
-      "commitSha": "c88c997250e220204406f95055b7fdaea6ee992b",
+      "commitSha": "7429a68249e09a82e3f87de9a885425ca799d4f8",
       "files": [
         "SKILL.md",
         "references/cocoapods-extras-patterns.md",
@@ -1627,21 +1631,24 @@
         "references/troubleshooting.md"
       ],
       "sha256": {
-        "SKILL.md": "5c70b7b4ac081b2e02b486d6c55d27ce056df26d899d73b45dd009206941e79a",
+        "SKILL.md": "06d75416ed876c18d950493a5aefe6ef5dd5cb955ec0c1d6c1c45cac8ab839ca",
         "references/cocoapods-extras-patterns.md": "38e9886bc1a3706b4b9fdfd51f38940ce47708e8d524276df160ca8af530f629",
-        "references/common-pods-mapping.md": "fe29a0c9c983435b4fb8f7cc2c26e1bf9e3d5fc173d69fcdd6b9d35b5240ceff",
-        "references/dsl-reference.md": "2c14735f11285635735f7358c3288620009d8ba2289f0974b617da4d49c64c37",
-        "references/migration-report-template.md": "a728c8c9b79ad8fecde3902af6d1810dae2e142b50b486fd9c49e129b3bead70",
-        "references/troubleshooting.md": "623103542d82a94f63810e8e99ed195b207b6320f9f1aef58e9c86a2882713eb"
+        "references/common-pods-mapping.md": "6f3cb5a2c2a0b096720ad4cb97a744e004e9598b3b4e26b5b8420633c14e5791",
+        "references/dsl-reference.md": "67b05e2de0f117463f8d743e624a9241f6820bea0380292b5b026a58050b5145",
+        "references/migration-report-template.md": "ea0d1fa2f4db039ad04f919a964f634ccd1b890336852574399eeaa74e84e7f5",
+        "references/troubleshooting.md": "aee1e42d1f4dd6e8fafba6de59896e1d6b667ada352de6d0e8c0bdc2971108da"
       },
-      "bundleHash": "b2fe785a0142ee05928c4ff672b741f3f37fc3a2c05340085da6cc406035c666",
+      "bundleHash": "f34ffc3826f5273b90e50085e10fddda8ca2456b148ce65193cdddadee5e9c1f",
       "review": {
-        "status": "approved",
-        "flags": [],
-        "summary": "review skipped (--no-review)",
+        "status": "flagged",
+        "flags": [
+          "destructive_commands",
+          "embedded_secret_example"
+        ],
+        "summary": "The skill is on-topic and mostly procedural, but it includes unconditional file-deletion commands and placeholder API key usage that merit human review.",
         "model": "gpt-5.4",
         "promptVersion": "1.0.0",
-        "reviewedAt": "2026-04-17T16:31:31.216Z"
+        "reviewedAt": "2026-04-24T21:31:55.747Z"
       }
     },
     "kotlin-tooling-agp9-migration": {
@@ -2109,23 +2116,31 @@
     "clerk-orgs": {
       "source": "clerk/skills",
       "skillPath": "clerk/skills/clerk-orgs",
-      "commitSha": "43d2211beca1885a8dcceb2cbabb39c55d419f16",
+      "commitSha": "f49091048946d4304d8f390cbfe164afac089bb4",
       "files": [
         "SKILL.md",
-        "evals/evals.json"
+        "evals/evals.json",
+        "references/enterprise-sso.md",
+        "references/invitations.md",
+        "references/nextjs-patterns.md",
+        "references/roles-permissions.md"
       ],
       "sha256": {
-        "SKILL.md": "87bc6bc4cfdb11777f1b8bc053515645cf062786d57e537bfd26befdae8dca33",
-        "evals/evals.json": "515eb1fd90d0eb198e2114974daabe596e799384ce3db7bac991f3c8956e0279"
+        "SKILL.md": "98896baa5794faf743b32715ea702177ca1e8262d7ec41aa44771749fe9de13e",
+        "evals/evals.json": "891d01132d6cbfd22361a52b2b9a2c7dffbb9170052d73f2106b9ae8a4a4fc9e",
+        "references/enterprise-sso.md": "b190fdfd3bdce551956d6873f4ef97629cb2e0bc1404a7936769c097ef945b77",
+        "references/invitations.md": "0499cabe30b89b95a1789617d688a4a61c7aafce5cd954aa3a4b7fc0af9a3708",
+        "references/nextjs-patterns.md": "76f83ae108c664ba7efc36e0db890667632e43d9825e12db7ac8785e6b1a3e15",
+        "references/roles-permissions.md": "09a077982add3079e769dd8a6a57818a62b386cc097a9fb96a7801379629030b"
       },
-      "bundleHash": "84b23347fd3f4f6068feaaa042d29116addd72957e33c8ce45d9dd6b14be0214",
+      "bundleHash": "90ba77cb7983c132ae329d8b33bfefb38b67ed78de0fb14a657015d523930d17",
       "review": {
         "status": "approved",
         "flags": [],
-        "summary": "review skipped (--no-review)",
+        "summary": "The skill content is on-topic documentation with no prompt injection, embedded secrets, suspicious links, or destructive commands.",
         "model": "gpt-5.4",
         "promptVersion": "1.0.0",
-        "reviewedAt": "2026-04-17T22:41:39.207Z"
+        "reviewedAt": "2026-04-24T21:29:09.508Z"
       }
     },
     "clerk-webhooks": {
@@ -2661,7 +2676,7 @@
     "azure-deploy": {
       "source": "microsoft/github-copilot-for-azure",
       "skillPath": "microsoft/github-copilot-for-azure/azure-deploy",
-      "commitSha": "b17b5b1566115c7c7b60126941229b6281c8e582",
+      "commitSha": "d01826fce9dc4139dc52230338a1808ab74bbc86",
       "files": [
         "SKILL.md",
         "references/auth-best-practices.md",
@@ -2703,10 +2718,11 @@
         "references/sdk/azure-identity-java.md",
         "references/sdk/azure-identity-py.md",
         "references/sdk/azure-identity-ts.md",
-        "references/troubleshooting.md"
+        "references/troubleshooting.md",
+        "version.json"
       ],
       "sha256": {
-        "SKILL.md": "91cf86ff51ebaa881924a9b7dbff4a4ed1e9e786931c106506e315de83a5a033",
+        "SKILL.md": "daa23eea47cd37110b5ceab709592d2cd8758520264dd03121896ebea2fdc80d",
         "references/auth-best-practices.md": "34f6fe88e2b5819c1a0f24aa3930a060d9504fee68ea4b363f0912a78daa5396",
         "references/global-rules.md": "f500e14ef282c4f75787e26f96e9671cdb29ad92c623a9f011ab02ff613622ed",
         "references/live-role-verification.md": "db545be4373ea6a5dec0e14a7283ee12ba3464ec4750a868bdcb33112dac1bdc",
@@ -2746,16 +2762,22 @@
         "references/sdk/azure-identity-java.md": "f506b1a1854f1c271c7e78a8996ca354b5e1681ef1a8a8799af4efdfa0000cdb",
         "references/sdk/azure-identity-py.md": "87730a9669cfa561efd23cf98da106a90b12a94872c8fe9f27a7a5b582af3ce0",
         "references/sdk/azure-identity-ts.md": "7cf5556fb9e06f4a3e9327dab8ce4aae5de09a9225fe5df6c95b3e7f4dc5e5bd",
-        "references/troubleshooting.md": "c5116670186964d0c44e6c8b9d235408eaf3aa77e90fd71dddc34d1c08d4ede4"
+        "references/troubleshooting.md": "c5116670186964d0c44e6c8b9d235408eaf3aa77e90fd71dddc34d1c08d4ede4",
+        "version.json": "6a195defa97943ab8d9ce89a7c35611e4a12c4494aa7bc2d219065e93baade35"
       },
-      "bundleHash": "247824db263c788a4a6067db4cb5d85e86c0a1f338a6fa266f86d74f3797962d",
+      "bundleHash": "6334818ba5cde438847676fd008d1e4f3b744b486e0638e27f93c7de61588f1d",
       "review": {
-        "status": "approved",
-        "flags": [],
-        "summary": "review skipped (--no-review)",
+        "status": "flagged",
+        "flags": [
+          "dangerous-command",
+          "broad-shell-usage",
+          "uses-eval",
+          "curl-pipe-shell"
+        ],
+        "summary": "Mostly on-topic Azure deployment guidance, but it includes risky command patterns such as `curl | bash` installation and multiple `eval $(azd env get-values)` examples that should be reviewed.",
         "model": "gpt-5.4",
         "promptVersion": "1.0.0",
-        "reviewedAt": "2026-04-17T22:42:20.084Z"
+        "reviewedAt": "2026-04-24T21:31:59.389Z"
       }
     },
     "azure-ai": {
@@ -2813,105 +2835,129 @@
     "azure-diagnostics": {
       "source": "microsoft/github-copilot-for-azure",
       "skillPath": "microsoft/github-copilot-for-azure/azure-diagnostics",
-      "commitSha": "b17b5b1566115c7c7b60126941229b6281c8e582",
+      "commitSha": "d01826fce9dc4139dc52230338a1808ab74bbc86",
       "files": [
         "SKILL.md",
-        "aks-troubleshooting/aks-troubleshooting.md",
-        "aks-troubleshooting/general-diagnostics.md",
-        "aks-troubleshooting/networking.md",
-        "aks-troubleshooting/node-issues.md",
-        "aks-troubleshooting/pod-failures.md",
-        "aks-troubleshooting/references/aks-mcp.md",
-        "aks-troubleshooting/references/command-flows.md",
-        "aks-troubleshooting/references/structured-input-modes.md",
         "references/azure-resource-graph.md",
         "references/container-apps/README.md",
         "references/functions/README.md",
-        "references/kql-queries.md"
+        "references/kql-queries.md",
+        "troubleshooting/aks/aks-troubleshooting.md",
+        "troubleshooting/aks/general-diagnostics.md",
+        "troubleshooting/aks/load-balancer-and-ingress.md",
+        "troubleshooting/aks/network-policy.md",
+        "troubleshooting/aks/networking.md",
+        "troubleshooting/aks/node-issues.md",
+        "troubleshooting/aks/pod-failures.md",
+        "troubleshooting/aks/references/aks-mcp.md",
+        "troubleshooting/aks/references/command-flows.md",
+        "troubleshooting/aks/references/structured-input-modes.md",
+        "troubleshooting/aks/spot-and-zone-issues.md",
+        "troubleshooting/aks/upgrade-operations.md",
+        "version.json"
       ],
       "sha256": {
-        "SKILL.md": "b7a3c219d3400e650ec6ef6c1f559a9e8c6bdb63b60f4b5b337d1bd69bd4112f",
-        "aks-troubleshooting/aks-troubleshooting.md": "1f5f7659440ea793688b45bfc6c66f751206ea6a334124bb4095c388b3a5dd85",
-        "aks-troubleshooting/general-diagnostics.md": "ca6c42f27c76bd05406d28fc008f250160c27f07ee9840f1bdfd0646e085100f",
-        "aks-troubleshooting/networking.md": "12bc5c840465c65bf92b1f4fce928ca79a4bf0715ca21104e008691ffba28689",
-        "aks-troubleshooting/node-issues.md": "9141d3ba2edfd8b01350706687fababc33e2c5371d6accd70483f5333f655f89",
-        "aks-troubleshooting/pod-failures.md": "2d73613c04c109146009f86ae7ed30f4115c102b5cd96e0e12827189e4eff0af",
-        "aks-troubleshooting/references/aks-mcp.md": "ed4217e6db4b7a42027e0be101111fe316ebeea828410008c6943704d01202a8",
-        "aks-troubleshooting/references/command-flows.md": "e41d2f98e41d34c9cb6f9df88afc914d07372894fd088158cfe2aeebd3c2c080",
-        "aks-troubleshooting/references/structured-input-modes.md": "eb1d1efe70567b5583d56c155a640ed6d3964befba1e63589d57045ee0640119",
+        "SKILL.md": "34d1b40a7cf66ea95ae0d8563e45217a8efc73e29bcba372ff379af7bf02b0c2",
         "references/azure-resource-graph.md": "e6b707e38a07cbc4b9c26333f730a262268223686aaecd75951bb208e32e8421",
         "references/container-apps/README.md": "8d7772007db8635af33cce1dde78f82e22f8c9df143e10a960e841cb2e479dd4",
-        "references/functions/README.md": "a0e17ad5131c42de9ba8e4c687f5bcc9c452a8aee8ac746729463dbfcb7259d4",
-        "references/kql-queries.md": "3a784ff92bb90e0967c0c40dc0ce4daed8b664ceb1f014bd7a70d8c2926cc8a3"
+        "references/functions/README.md": "c251fd5a6201d88f325c8f5da3c39409719e277dc3e2b561c8d204eb5b0481c7",
+        "references/kql-queries.md": "3a784ff92bb90e0967c0c40dc0ce4daed8b664ceb1f014bd7a70d8c2926cc8a3",
+        "troubleshooting/aks/aks-troubleshooting.md": "71c4bf1dc356c85941133f5897b5d484d336693e621e2e0a090536bea61fa797",
+        "troubleshooting/aks/general-diagnostics.md": "426fa1b3cc1e4a1c3da1192a0e8772160ebdd25d7caa12139f56782899edde39",
+        "troubleshooting/aks/load-balancer-and-ingress.md": "411fe1e7af9b072011d1cdc34733051cf8c31d6fa59355c0b0a5b2421a5f4681",
+        "troubleshooting/aks/network-policy.md": "557901c258eb637baad32466e6e4eb9e570fa66deebb21520cef3436fe4672ce",
+        "troubleshooting/aks/networking.md": "26eb7c4d233be946a7787887098a27d2395c77329e06be3b5835ab3a7bd5ba19",
+        "troubleshooting/aks/node-issues.md": "0bea9d7d6e4ff7160890f0d49d6d0bc4fdd66037c8e5c1414470535819333267",
+        "troubleshooting/aks/pod-failures.md": "e0a51dc933ed7948952f76245c6d349e6120022311cc80a360b72efe9f6cf5fa",
+        "troubleshooting/aks/references/aks-mcp.md": "ed4217e6db4b7a42027e0be101111fe316ebeea828410008c6943704d01202a8",
+        "troubleshooting/aks/references/command-flows.md": "e41d2f98e41d34c9cb6f9df88afc914d07372894fd088158cfe2aeebd3c2c080",
+        "troubleshooting/aks/references/structured-input-modes.md": "eb1d1efe70567b5583d56c155a640ed6d3964befba1e63589d57045ee0640119",
+        "troubleshooting/aks/spot-and-zone-issues.md": "00531f4c15aafa5d89d9d8696d2b83c37611fbf7014600308252ef2382ec0379",
+        "troubleshooting/aks/upgrade-operations.md": "a159e73391f2436c0184790deb9a3296c766288269cead50d07f3d021331dc88",
+        "version.json": "6a195defa97943ab8d9ce89a7c35611e4a12c4494aa7bc2d219065e93baade35"
       },
-      "bundleHash": "93dc7a1d099b895531f6c3b75cfc9c66e503ff0ebfe58321cc5ae76e5b6ceb06",
+      "bundleHash": "d871872784faa9866b79b39ced12d8703366fcbdc01e5d419f2c41736bbdd434",
       "review": {
-        "status": "approved",
-        "flags": [],
-        "summary": "review skipped (--no-review)",
+        "status": "flagged",
+        "flags": [
+          "embedded secrets",
+          "broad access to sensitive telemetry"
+        ],
+        "summary": "The skill is mostly safe diagnostic guidance, but it includes instructions to retrieve and expose Application Insights instrumentation keys and connection strings, which are sensitive and should be human-reviewed.",
         "model": "gpt-5.4",
         "promptVersion": "1.0.0",
-        "reviewedAt": "2026-04-17T22:42:20.099Z"
+        "reviewedAt": "2026-04-24T21:32:00.374Z"
       }
     },
     "elevenlabs-tts": {
       "source": "inferen-sh/skills",
       "skillPath": "inferen-sh/skills/elevenlabs-tts",
-      "commitSha": "b684df19dfd358121027f82aee1159cf41fa8a3a",
+      "commitSha": "d5e75fdb44099754b214a0b2728e7b61084e936b",
       "files": [
         "SKILL.md"
       ],
       "sha256": {
-        "SKILL.md": "922f4d6c651a0d76f43ac1ba289070567784920ad7649b68ee876dc5999063c9"
+        "SKILL.md": "ad734a57b5fef9b91d7b4dc43efd15663c28a9a8fcc8ab2d468fa8184f0ccff1"
       },
-      "bundleHash": "c63751442bf4382b82207fd156b4e7494d43b7b09c521f1e65065e3d0b2d60d7",
+      "bundleHash": "e9b3c9ff25a3ad776bef027285aede6c3ceb9888c6474c4764f0999504a3421d",
       "review": {
-        "status": "approved",
-        "flags": [],
-        "summary": "review skipped (--no-review)",
+        "status": "flagged",
+        "flags": [
+          "external raw GitHub install link",
+          "broad tool allowance: Bash(belt *)",
+          "cross-skill/package installation commands"
+        ],
+        "summary": "The skill is mostly on-topic and non-destructive, but it includes an external raw install link and broad tool/package installation references that warrant human review.",
         "model": "gpt-5.4",
         "promptVersion": "1.0.0",
-        "reviewedAt": "2026-04-17T22:42:28.601Z"
+        "reviewedAt": "2026-04-24T21:32:00.767Z"
       }
     },
     "elevenlabs-music": {
       "source": "inferen-sh/skills",
       "skillPath": "inferen-sh/skills/elevenlabs-music",
-      "commitSha": "b684df19dfd358121027f82aee1159cf41fa8a3a",
+      "commitSha": "d5e75fdb44099754b214a0b2728e7b61084e936b",
       "files": [
         "SKILL.md"
       ],
       "sha256": {
-        "SKILL.md": "5931f8dba09364e52b500f71ad6d8d4c85cfe136804e824a39600ea32421d446"
+        "SKILL.md": "63d679aab2e247c06e951e36b82be28acd2a09f0c65a9b6172c79135699970b2"
       },
-      "bundleHash": "100a155328276baae108acfd9453d6d6cb3f494e903da50bf1c342f9b66990ad",
+      "bundleHash": "581d57dc44d8a88919b443e68f1853d3b560ee60343c6179a8c15b2039430f3b",
       "review": {
-        "status": "approved",
-        "flags": [],
-        "summary": "review skipped (--no-review)",
+        "status": "flagged",
+        "flags": [
+          "external raw GitHub install link should be human-checked",
+          "broad tool allowance: Bash(belt *)"
+        ],
+        "summary": "The skill is on-topic and contains no obvious secrets or prompt injection, but the raw GitHub install link and broad belt tool access warrant a quick review.",
         "model": "gpt-5.4",
         "promptVersion": "1.0.0",
-        "reviewedAt": "2026-04-17T22:42:28.603Z"
+        "reviewedAt": "2026-04-24T21:32:01.202Z"
       }
     },
     "python-executor": {
       "source": "inferen-sh/skills",
       "skillPath": "inferen-sh/skills/python-executor",
-      "commitSha": "b684df19dfd358121027f82aee1159cf41fa8a3a",
+      "commitSha": "d5e75fdb44099754b214a0b2728e7b61084e936b",
       "files": [
         "SKILL.md"
       ],
       "sha256": {
-        "SKILL.md": "b893ac4ec65d8b5258a6fcb381c192b3cab04d98563b0dd8354b067a7f19e507"
+        "SKILL.md": "9e98dc54bc17e186935f3b3bd844048d3e74dd646ef6a18aea17993990989dbd"
       },
-      "bundleHash": "49d3bf797dc8c24362d7552af9dd3019ce4e48ed1c229c1329328ac4129de723",
+      "bundleHash": "bd2d874c27788964fadf03c0840049de0409407f06f883ee90886164cb22ef69",
       "review": {
-        "status": "approved",
-        "flags": [],
-        "summary": "review skipped (--no-review)",
+        "status": "flagged",
+        "flags": [
+          "external raw GitHub install link",
+          "broad code execution capability",
+          "web scraping and external API access"
+        ],
+        "summary": "The skill is on-topic and mostly safe, but it enables arbitrary Python execution with network-capable libraries and includes an install link to a raw GitHub URL that should be human-reviewed.",
         "model": "gpt-5.4",
         "promptVersion": "1.0.0",
-        "reviewedAt": "2026-04-17T22:42:28.605Z"
+        "reviewedAt": "2026-04-24T21:32:01.629Z"
       }
     },
     "cloudflare": {
@@ -3567,21 +3613,25 @@
     "wrangler": {
       "source": "cloudflare/skills",
       "skillPath": "cloudflare/skills/wrangler",
-      "commitSha": "0397d7d88fa6ac7517a88389622eb0799e86ded2",
+      "commitSha": "0438a075b419f737eb091d1c91800b7387e3a75f",
       "files": [
         "SKILL.md"
       ],
       "sha256": {
-        "SKILL.md": "f691b6c1e6aeeb1419972806f7000a47b4d7414764cbf0cf898bc08bb4746f09"
+        "SKILL.md": "42abe11ba6c0cb0c135deed1d591d844838fe0b61fc8c6d675a832435508a61b"
       },
-      "bundleHash": "039c557179b9e2ddc3885b53e44504a7e9ad376e3582719d87b45bf776923956",
+      "bundleHash": "d9a05896e7ef591d4c499436ce0a53c510800832de30de866b2c2999efe3f622",
       "review": {
-        "status": "approved",
-        "flags": [],
-        "summary": "review skipped (--no-review)",
+        "status": "flagged",
+        "flags": [
+          "broad installation command (`npm install -D wrangler@latest`) should be user-contextualized",
+          "commands that delete or modify remote resources are listed without explicit confirmation context",
+          "example `.dev.vars` contains credential-like values and a database URL placeholder"
+        ],
+        "summary": "The skill is on-topic and mostly safe, but it includes broad install and destructive management commands plus example secret-like local variables that warrant a quick human review.",
         "model": "gpt-5.4",
         "promptVersion": "1.0.0",
-        "reviewedAt": "2026-04-17T22:42:29.674Z"
+        "reviewedAt": "2026-04-24T21:32:02.083Z"
       }
     },
     "workers-best-practices": {
@@ -5891,11 +5941,12 @@
     "rails-upgrade": {
       "source": "ombulabs/claude-code_rails-upgrade-skill",
       "skillPath": "ombulabs/claude-code_rails-upgrade-skill/rails-upgrade",
-      "commitSha": "b554acd75e84e70a73b3b73fc87b31eafa4f9b31",
+      "commitSha": "cd72298fd759515f07176a36244bb217a8205d5b",
       "files": [
         "CHANGELOG.md",
         "SKILL.md",
         "detection-scripts/patterns/rails-40-patterns.yml",
+        "detection-scripts/patterns/rails-42-patterns.yml",
         "detection-scripts/patterns/rails-50-patterns.yml",
         "detection-scripts/patterns/rails-60-patterns.yml",
         "detection-scripts/patterns/rails-70-patterns.yml",
@@ -5903,8 +5954,6 @@
         "detection-scripts/patterns/rails-72-patterns.yml",
         "detection-scripts/patterns/rails-80-patterns.yml",
         "detection-scripts/patterns/rails-81-patterns.yml",
-        "detection-scripts/templates/detection-script-template.sh",
-        "examples/detection-script-only.md",
         "examples/multi-hop-upgrade.md",
         "examples/simple-upgrade.md",
         "references/breaking-changes-by-version.md",
@@ -5916,6 +5965,7 @@
         "templates/app-update-preview-template.md",
         "templates/upgrade-report-template.md",
         "version-guides/upgrade-3.2-to-4.0.md",
+        "version-guides/upgrade-4.1-to-4.2.md",
         "version-guides/upgrade-4.2-to-5.0.md",
         "version-guides/upgrade-5.0-to-5.1.md",
         "version-guides/upgrade-5.1-to-5.2.md",
@@ -5927,7 +5977,6 @@
         "version-guides/upgrade-7.2-to-8.0.md",
         "version-guides/upgrade-8.0-to-8.1.md",
         "workflows/app-update-preview-workflow.md",
-        "workflows/detection-script-workflow.md",
         "workflows/direct-detection-workflow.md",
         "workflows/test-suite-verification-workflow.md",
         "workflows/upgrade-report-workflow.md"
@@ -5936,6 +5985,7 @@
         "CHANGELOG.md": "f36a2bbfac764ade05d3fe8fd91892f752fd9ce109e56e5a127a0b441312fba4",
         "SKILL.md": "ed271bb77a972deb3df4cd839e013b19490b9ef5e6ed18959a6a813f67fe4e35",
         "detection-scripts/patterns/rails-40-patterns.yml": "1e5826c7e214bb3ace8fbf5630bd32147a1474dc4c6129a9614b53cc0a069402",
+        "detection-scripts/patterns/rails-42-patterns.yml": "9c5352a6af66c624a81907804f3ad17e5e599d6967bcac06052545bc8847e88e",
         "detection-scripts/patterns/rails-50-patterns.yml": "d2109d2171d2732acae91e7f149497a28c635436936b399bd788e90a1fc1590d",
         "detection-scripts/patterns/rails-60-patterns.yml": "8d0f8420ffb5e90c39dd3a68088328e8535bcd4267fcccb88158380d80ccc53d",
         "detection-scripts/patterns/rails-70-patterns.yml": "81a16f07c8b2e8f1388a7d593e97b8e94c10d3ce8f3f72ba6256f96bf6060f08",
@@ -5943,10 +5993,8 @@
         "detection-scripts/patterns/rails-72-patterns.yml": "f30d85f313d7ef0917879c28c6200e4a61cf48a7b867875136aee1dd9e60ddf1",
         "detection-scripts/patterns/rails-80-patterns.yml": "5b6baefbb83bb4fa364b6502a3d6fa7cf26281914b0d22b9d528cd97e542194d",
         "detection-scripts/patterns/rails-81-patterns.yml": "8244b0805e8886ddbfa231e12038f2521a7a1333733c4b949a6657fe0a0414af",
-        "detection-scripts/templates/detection-script-template.sh": "741edc8c60ca5cbf6de97d110f7b262c08dcecb4a236e2e28d398bafab0640d9",
-        "examples/detection-script-only.md": "9b1d758170b0826886b6087aab59d1cd2937fb7fd1aec92fada089590438dcdc",
-        "examples/multi-hop-upgrade.md": "b353634afb6bdad1bae91de6e0bc7b4aa88527018da0dd9bc20671b901eb6fed",
-        "examples/simple-upgrade.md": "48d1704a38b8453cfde3992418efdd550e5a69a0da11863134d4ecf8e4dd5d5a",
+        "examples/multi-hop-upgrade.md": "fe3d908cb4c87b30b8d0a8a51be1f7e29b67fb4a4d2b6ae261d5904684cd8c92",
+        "examples/simple-upgrade.md": "a5c37651efbd18f692b9ec987a039821b00c169becac47c948264e4fecc59fdf",
         "references/breaking-changes-by-version.md": "9276458f8e9406d91e6b9d722330550d6629439ebe7cd5897be7002516d2d0f0",
         "references/deprecation-warnings.md": "84765787aef2630009029b244cabcdf82c4f7ff8bf5a6e26bc1e2c7ae5776fc0",
         "references/gem-compatibility.md": "081ae433f06b03c39879cc41f85a234bc9ac955275c701046169b58d22d3b3d3",
@@ -5956,6 +6004,7 @@
         "templates/app-update-preview-template.md": "de0bacdf445dbee745207cc92cbf954459291d2f8e869ce4a466fb648e5db30e",
         "templates/upgrade-report-template.md": "3eb33eff157b57d41cfb55c6f149e6c6e53a23f0e38566ba2391a9bbf059a989",
         "version-guides/upgrade-3.2-to-4.0.md": "07dd9f173051ae47d409794b4ba8a14a50138065138d4c524c570acdb2071c52",
+        "version-guides/upgrade-4.1-to-4.2.md": "83f369dc29a10e30746e78ad173a0237d1eb6c98e3734f46ba017fb3a3c343c4",
         "version-guides/upgrade-4.2-to-5.0.md": "8aa8740a9847f7045a5de8403fa9bbb904dde86d1b29e994f8fc160c116e6f70",
         "version-guides/upgrade-5.0-to-5.1.md": "c02406694bbf8302fb1367a2b9fb6be57c2650bf4c4f58f3460cf94d6ede2fca",
         "version-guides/upgrade-5.1-to-5.2.md": "5709acc88bed0c000bd4631cd55c5c80f8a031d170e6844e57e9459481ab640c",
@@ -5966,20 +6015,24 @@
         "version-guides/upgrade-7.1-to-7.2.md": "6173e01c1d84e1d557cc1bfcb094ef5d5c170b4b90f42a4ccc077c5c1912a7e7",
         "version-guides/upgrade-7.2-to-8.0.md": "e8cb3ecc786d05df09258f26045cb97dab41b7a3f00a1e749df9cdb690b855e8",
         "version-guides/upgrade-8.0-to-8.1.md": "d41bb990284c62333d61d3f0ffd4c1fc13a866966ded4929cf4fc3fc60b22a90",
-        "workflows/app-update-preview-workflow.md": "1d1d11538105708a2756a39be365ecea702512186cea40396f133f9d05f29c7d",
-        "workflows/detection-script-workflow.md": "1fadeb3a2837b2a1db3731a2de7d0a9b6cac9f06d24bda03beafc0fa785f7485",
-        "workflows/direct-detection-workflow.md": "4b08381e7cfdd12cb7215cb4a78e24ef6e662e0d6c108e0230dfffc85b75ea89",
+        "workflows/app-update-preview-workflow.md": "c1d470f021dc09a29ecceb05cd09792720c09b1ac7be189cff1a9b2cef646621",
+        "workflows/direct-detection-workflow.md": "651d6f70654c0c0b4efa635c479e45f6cb6debfef8a06f48f47ad8a774c553eb",
         "workflows/test-suite-verification-workflow.md": "8e3cb4c921725404f0b651ad83709629475a0ac53a3009b057e38b81e6a1dd70",
         "workflows/upgrade-report-workflow.md": "11b322f8683c022ce9601775a6a9e4c930ae2bf95fea728ac7d439952d4eb5db"
       },
-      "bundleHash": "a34f31b8ed133a5a2327008722831523095e1bd1ec85ca78af40dc946c992a5b",
+      "bundleHash": "915a1833a77ec58d92531229f279807180b2b8eaafbf29a545c4ffbfbb6a7346",
       "review": {
-        "status": "approved",
-        "flags": [],
-        "summary": "review skipped (--no-review)",
+        "status": "flagged",
+        "flags": [
+          "broad shell commands and executable script creation",
+          "network access instructions using curl to external API",
+          "instructions to create and chmod a bin script with a mismatched name (`bin/brakeman` requiring bundler-audit)",
+          "external links included throughout without strict necessity"
+        ],
+        "summary": "The skill is largely on-topic and safe, but it includes several broad command examples, external network calls, and a potentially confusing script-generation step that merits human review.",
         "model": "gpt-5.4",
         "promptVersion": "1.0.0",
-        "reviewedAt": "2026-04-18T04:04:42.364Z"
+        "reviewedAt": "2026-04-24T21:32:02.495Z"
       }
     },
     "redis-development": {
@@ -11439,7 +11492,7 @@
     "azure-cost": {
       "source": "microsoft/github-copilot-for-azure",
       "skillPath": "microsoft/github-copilot-for-azure/azure-cost",
-      "commitSha": "946fa118accbe2e9eef515f2842233014f4f2ebb",
+      "commitSha": "d01826fce9dc4139dc52230338a1808ab74bbc86",
       "files": [
         "SKILL.md",
         "cost-forecast/error-handling.md",
@@ -11461,10 +11514,11 @@
         "cost-query/examples.md",
         "cost-query/guardrails.md",
         "cost-query/request-body-schema.md",
-        "cost-query/workflow.md"
+        "cost-query/workflow.md",
+        "version.json"
       ],
       "sha256": {
-        "SKILL.md": "a158067f2b4f7c840308d30f96747bb2deb4d78808cdb1f9959189a5c9385d27",
+        "SKILL.md": "3ed2acea78c941c3802119a1d365877324634e4604274ce554ca52350a7c3357",
         "cost-forecast/error-handling.md": "86a4318fc7e4f6a8975a5278778d3fb8f9e8183f2f9f317c09f8e8bee974d210",
         "cost-forecast/examples.md": "e47a8fff22f7a3aa0f6fd747fc19be0302ad369a987defd8917cbbbcdfe20a1c",
         "cost-forecast/guardrails.md": "043302f30a54a62dceb80e3a21c09121de1e00f8188e22794813e6d3054b8509",
@@ -11484,16 +11538,21 @@
         "cost-query/examples.md": "a9b436dbeff981e92ef89c2574f403bacfa62f1bd24ef250e734d420e06cd9f9",
         "cost-query/guardrails.md": "590b09348f854c601e546c705c94a25f695f865f3f75f5e0cb9d1ab51e6dc607",
         "cost-query/request-body-schema.md": "9420fefa3506054d6359848915b48352cb63ed45c4d27672452c3986071bed93",
-        "cost-query/workflow.md": "569e613634fee3afdbdf5715c85e3ece018578af32bcbde4f5bbc98b7a607cb7"
+        "cost-query/workflow.md": "569e613634fee3afdbdf5715c85e3ece018578af32bcbde4f5bbc98b7a607cb7",
+        "version.json": "c739380475381a6aa93a1dad6578fc5fd1b8c62ea780d4162fc79ae948aaaeb9"
       },
-      "bundleHash": "0f361d30ea18d8350417a8540f7badcd544a9e8bf1fe85d73b07e7eae74dd773",
+      "bundleHash": "84dafb518e1948a1ecc4120d82edfd32af34d779f4ff39736b5aec0b707e5e32",
       "review": {
-        "status": "approved",
-        "flags": [],
-        "summary": "review skipped (--no-review)",
+        "status": "flagged",
+        "flags": [
+          "broad file-writing instructions to temp/output paths",
+          "cleanup command recursively deletes temp directory with force",
+          "direct CLI commands that modify Azure resources are included alongside read-only analysis guidance"
+        ],
+        "summary": "Mostly on-topic Azure cost-management content, but it includes some broad file operations and resource-modifying commands that warrant human review.",
         "model": "gpt-5.4",
         "promptVersion": "1.0.0",
-        "reviewedAt": "2026-04-18T04:03:23.512Z"
+        "reviewedAt": "2026-04-24T21:31:59.936Z"
       }
     },
     "use-ai-sdk": {
